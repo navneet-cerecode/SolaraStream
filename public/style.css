@@ -1,0 +1,207 @@
+:root {
+    --glass-bg: rgba(255, 255, 255, 0.08);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    --accent: #00d4ff; 
+    --accent-hover: #00a3cc;
+    --text: #ffffff;
+    --bg-gradient: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+}
+  
+body {
+    font-family: 'Inter', 'Segoe UI', sans-serif;
+    background: var(--bg-gradient);
+    background-attachment: fixed; 
+    color: var(--text);
+    margin: 0; padding: 20px;
+    overflow-x: hidden;
+    height: 100vh; box-sizing: border-box;
+}
+  
+/* --- GLASS PANELS --- */
+.glass-panel {
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px; box-shadow: var(--glass-shadow); padding: 20px;
+}
+  
+/* --- LOBBY --- */
+#lobby { max-width: 400px; margin: 15vh auto; text-align: center; }
+#lobby h1 { margin-bottom: 5px; font-weight: 800; letter-spacing: -1px;}
+#lobby p { color: #aaa; margin-bottom: 30px; }
+.input-group { display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px; }
+  
+input[type="text"] {
+    background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1);
+    padding: 15px; border-radius: 8px; color: white; font-size: 1rem;
+    outline: none; transition: border-color 0.3s;
+}
+input[type="text"]:focus { border-color: var(--accent); }
+  
+/* --- BUTTONS --- */
+button { cursor: pointer; border: none; outline: none; transition: all 0.2s; }
+  
+.primary-btn {
+    background: var(--accent); color: #000; font-weight: bold;
+    padding: 12px 24px; border-radius: 8px; font-size: 1rem; width: 100%;
+}
+.primary-btn:hover { background: var(--accent-hover); transform: translateY(-2px); }
+.primary-btn.small { width: auto; padding: 10px 20px; }
+  
+.icon-btn { background: rgba(255,255,255,0.1); color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
+.icon-btn:hover { background: rgba(255,255,255,0.2); }
+.icon-btn.danger:hover { background: #ff4757; }
+  
+.text-btn { background: transparent; color: #ccc; padding: 8px 16px; font-size: 0.9rem; border-radius: 6px; }
+.text-btn:hover { background: rgba(255,255,255,0.1); color: white; }
+
+/* Privacy Red State */
+.btn-danger {
+    background: rgba(255, 71, 87, 0.2) !important; color: #ff4757 !important; border: 1px solid #ff4757;
+}
+
+/* --- HEADER & TOOLBAR --- */
+.glass-header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 20px; background: rgba(0,0,0,0.2);
+    padding: 15px 20px; border-radius: 12px; backdrop-filter: blur(5px);
+}
+.header-actions { display: flex; gap: 10px; }
+  
+.glass-toolbar {
+    display: inline-flex; background: var(--glass-bg);
+    backdrop-filter: blur(10px); border: 1px solid var(--glass-border);
+    border-radius: 50px; padding: 8px 20px; gap: 10px;
+    align-items: center; margin-bottom: 20px; z-index: 3000;
+}
+.divider { width: 1px; height: 20px; background: rgba(255,255,255,0.2); }
+
+/* --- WEBCAM GRID --- */
+#videoGrid {
+    display: flex; justify-content: center; gap: 15px; margin-bottom: 20px; 
+    flex-wrap: wrap; min-height: 100px; position: relative;
+    transition: all 0.5s ease;
+}
+  
+.video-wrapper {
+    position: relative; width: fit-content; height: fit-content;
+    margin: 5px; transition: transform 0.2s, top 0.3s ease, left 0.3s ease;
+    background: #000; border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 2000;
+}
+
+/* Ensure hidden wrappers are actually hidden */
+.video-wrapper[style*="display: none"] { display: none !important; }
+
+.video-wrapper.is-dragging { transition: none !important; z-index: 9999; cursor: grabbing; box-shadow: 0 10px 30px rgba(0,0,0,0.8); scale: 1.05; }
+  
+.user-video {
+    width: 180px; height: 100px; border-radius: 12px; 
+    object-fit: cover; cursor: grab; display: block;
+}
+.video-selected .user-video { border: 2px solid var(--accent); }
+.my-video { display: block !important; }
+
+.name-tag {
+    position: absolute; bottom: 8px; left: 8px;
+    background: rgba(0,0,0,0.6); backdrop-filter: blur(4px);
+    padding: 4px 8px; border-radius: 6px; font-size: 0.75rem; pointer-events: none;
+}
+  
+/* --- CHAT BOX --- */
+#chatContainer {
+    position: fixed; bottom: 20px; left: 20px; width: 320px; height: 450px;
+    display: none; flex-direction: column; z-index: 5000; padding: 0;
+}
+#chatHeader { padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); font-weight: bold; cursor: move; background: rgba(255,255,255,0.05); border-radius: 16px 16px 0 0; }
+#chatMessages { flex: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 8px; }
+#chatInputArea { display: flex; padding: 10px; border-top: 1px solid rgba(255,255,255,0.1); }
+#chatInput { background: rgba(0,0,0,0.2); border: none; width: 100%; border-radius: 8px 0 0 8px; padding: 10px; color: white;}
+#sendBtn { width: auto; border-radius: 0 8px 8px 0; padding: 0 20px; background: var(--accent); color: #000;}
+.message { font-size: 0.9rem; padding: 8px 12px; border-radius: 8px; background: rgba(255,255,255,0.1); width: fit-content; max-width: 80%; }
+.msg-user { font-weight: bold; color: var(--accent); display: block; font-size: 0.75rem; margin-bottom: 2px;}
+  
+/* --- PLAYER --- */
+.player-container {
+    border-radius: 16px; overflow: hidden; background: #000;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5); margin-bottom: 30px;
+}
+video#mainMovie { width: 100%; max-height: 80vh; display: block; }
+  
+/* --- LIBRARY --- */
+.control-panel { max-width: 1200px; margin: 0 auto; text-align: left; }
+.upload-row { display: flex; gap: 10px; align-items: center; margin-bottom: 20px; flex-wrap: wrap; }
+.file-upload {
+    background: rgba(255,255,255,0.1); padding: 8px 15px; border-radius: 8px;
+    cursor: pointer; font-size: 0.9rem; display: flex; align-items: center; transition: background 0.2s;
+}
+.file-upload:hover { background: rgba(255,255,255,0.2); }
+.file-upload input { display: none; }
+.movie-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 20px; }
+.movie-card {
+    aspect-ratio: 2 / 3; border-radius: 12px; overflow: hidden; cursor: pointer; position: relative;
+    transition: transform 0.3s; box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+.movie-card:hover { transform: scale(1.05); z-index: 10; }
+.movie-card img { width: 100%; height: 100%; object-fit: cover; }
+.movie-card .fallback-title { display: flex; align-items: center; justify-content: center; height: 100%; padding: 10px; text-align: center; background: #222; color: #fff; }
+  
+/* --- FULLSCREEN MODE (WATCH MODE) --- */
+#videoRoom:fullscreen { 
+    background: #000; padding: 0; margin: 0;
+    display: grid; place-items: center; overflow: hidden; 
+}
+#videoRoom:fullscreen .player-container { 
+    width: 100vw; height: 100vh; margin: 0 !important;
+    border-radius: 0; background: #000; display: flex; 
+    align-items: center; justify-content: center; box-shadow: none;
+}
+#videoRoom:fullscreen video#mainMovie { 
+    width: 100%; height: 100%; max-height: 100vh; 
+    object-fit: contain; object-position: center center;
+}
+#videoRoom:fullscreen #videoGrid { 
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
+    pointer-events: none; z-index: 2000; 
+}
+#videoRoom:fullscreen .video-wrapper { pointer-events: auto; position: absolute; }
+#videoRoom:fullscreen .glass-toolbar { 
+    position: absolute; top: 20px; left: 50%; transform: translateX(-50%); 
+    z-index: 3000; opacity: 0; transition: opacity 0.3s;
+}
+#videoRoom:fullscreen:hover .glass-toolbar { opacity: 1; }
+#videoRoom:fullscreen .control-panel, 
+#videoRoom:fullscreen .glass-header,
+#videoRoom:fullscreen #toastContainer { display: none !important; }
+
+/* --- MEETING MODE (GRID SPLIT) --- */
+.meeting-active .player-container { display: none !important; }
+
+.meeting-active #videoGrid {
+    pointer-events: auto !important; position: relative !important;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    width: 100vw; height: 100vh; padding: 20px; box-sizing: border-box;
+    align-items: center; justify-content: center; gap: 20px;
+    overflow-y: auto; z-index: 5000;
+}
+.meeting-active .video-wrapper {
+    width: 100% !important; height: 100% !important; max-height: 80vh;
+    margin: 0 !important; background: transparent; box-shadow: none;
+}
+.meeting-active .user-video {
+    width: 100% !important; height: 100% !important;
+    object-fit: contain; border-radius: 12px;
+    border: 2px solid rgba(255,255,255,0.1);
+}
+@media (max-width: 768px) {
+    .meeting-active #videoGrid { grid-template-columns: 1fr; }
+}
+
+/* --- TOASTS --- */
+#toastContainer { position: fixed; top: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; }
+.toast { background: rgba(0, 0, 0, 0.8); border-left: 4px solid var(--accent); padding: 12px 20px; border-radius: 8px; animation: fadein 0.3s, fadeout 0.3s 2.7s; backdrop-filter: blur(5px); }
+@keyframes fadein { from {opacity: 0; transform: translateX(20px);} to {opacity: 1; transform: translateX(0);} }
+@keyframes fadeout { from {opacity: 1;} to {opacity: 0;} }
