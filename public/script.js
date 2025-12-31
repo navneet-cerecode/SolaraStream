@@ -34,11 +34,26 @@ document.getElementById('joinBtn').addEventListener('click', async () => {
   }
 
   // Connect to PeerJS
-  myPeer = new Peer(undefined, { 
-    path: '/peerjs', 
-    host: '/', 
-    port: location.port || (location.protocol === 'https:' ? 443 : 80)
-  });
+// Connect to PeerJS
+myPeer = new Peer(undefined, { 
+  path: '/peerjs', 
+  host: '/', 
+  port: location.port || (location.protocol === 'https:' ? 443 : 80),
+  config: {
+      iceServers: [
+          // 1. Google's Free STUN Server (Works for 80% of users)
+          { urls: 'stun:stun.l.google.com:19302' },
+          { urls: 'stun:stun1.l.google.com:19302' },
+
+          // 2. (Optional) Your TURN Server would go here
+          // {
+          //   urls: "turn:your-turn-server.com:3478",
+          //   username: "username",
+          //   credential: "password"
+          // }
+      ]
+  }
+}); 
   
   myPeer.on('open', id => {
       socket.emit('join_room', { room: currentRoom, peerId: id, username: myUsername }); 
